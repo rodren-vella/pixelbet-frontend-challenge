@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./App.scss";
-import logo from "./assets/dice-logo.svg";
 import dice1 from "./assets/dice1.svg";
 import dice2 from "./assets/dice2.svg";
 import dice3 from "./assets/dice3.svg";
@@ -10,6 +9,7 @@ import dice6 from "./assets/dice6.svg";
 
 import minus from "./assets/minus.svg";
 import plus from "./assets/plus.svg";
+import DiceScreen from "./components/diceScreen";
 
 const dices = [
   { diceNumber: 1, diceImage: `${dice1}` },
@@ -25,9 +25,12 @@ class App extends Component {
     super();
     this.state = {
       user: {},
+      lastDiceSelected: 0,
       diceSelected: 0,
       betAmount: 0,
       betDifference: 10,
+      gameStatus: "home",
+      gameInPlay: false,
     };
   }
 
@@ -35,6 +38,13 @@ class App extends Component {
     fetch("http://localhost:3000/get-user/robouser")
       .then((response) => response.json())
       .then((data) => this.setState({ user: data }));
+  };
+
+  getDiceImage = (searchDiceNumber) => {
+    const foundDiceImage = dices.find(
+      ({ diceNumber }) => diceNumber === searchDiceNumber
+    ).diceImage;
+    return foundDiceImage;
   };
 
   componentDidMount() {
@@ -84,7 +94,7 @@ class App extends Component {
         .childNodes[i].classList.toggle("active");
     }
 
-    this.setState({ diceSelected: dice });
+    this.setState({ gameInPlay: true, diceSelected: dice });
   };
 
   submitBet = () => {
@@ -101,7 +111,12 @@ class App extends Component {
       .then((data) => {
         console.log(data);
         if (data) {
-          console.log("POSTED");
+          console.log("POSTED", data.result);
+          this.setState({
+            gameInPlay: false,
+            gameStatus: data.result,
+            lastDiceSelected: this.state.diceSelected,
+          });
         }
       });
   };
@@ -109,18 +124,26 @@ class App extends Component {
   render() {
     const { user, betAmount } = this.state;
 
+    const lastDiceSelectedImage =
+      this.state.lastDiceSelected !== 0 &&
+      this.getDiceImage(this.state.lastDiceSelected);
+    const diceSelectedImage =
+      this.state.diceSelected !== 0 &&
+      this.getDiceImage(this.state.diceSelected);
+
     return (
       <div className="diceToss">
         <div className="topBar">
           <a href="/">{user.balance} V</a>
         </div>
 
-        <div className="diceScreen">
-          <img src={logo} alt="DICE TOSS" width="40%" />
-
-          <span className="diceScreen__amount">&nbsp;</span>
-          <span className="diceScreen__outcome">&nbsp;</span>
-        </div>
+        <DiceScreen
+          gameInPlay={this.state.gameInPlay}
+          lastDiceSelectedImage={lastDiceSelectedImage}
+          diceSelectedImage={diceSelectedImage}
+          gameStatus={this.state.gameStatus}
+          betAmount={this.state.user.balance}
+        />
 
         <div className="betPanel">
           <div className="betPanel__diceSlection">

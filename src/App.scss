@@ -6,6 +6,10 @@ $pink: #ff2983;
 $text: rgba(255, 255, 255, 0.4);
 $white: #ffffff;
 
+.won path {
+  fill: $green;
+}
+
 .diceToss {
   font-family: "Roboto", sans-serif;
   color: $text;
@@ -40,6 +44,14 @@ $white: #ffffff;
     align-items: center;
     flex-direction: column;
     color: $white;
+
+    .won {
+      filter: invert(0.5) sepia(1);
+      fill: $green;
+    }
+    .loss path {
+      fill: black;
+    }
 
     &__amount {
       margin-top: 32px;
