@@ -1,11 +1,5 @@
 import React, { Component } from "react";
 import "./App.scss";
-import dice1 from "./assets/dice1.svg";
-import dice2 from "./assets/dice2.svg";
-import dice3 from "./assets/dice3.svg";
-import dice4 from "./assets/dice4.svg";
-import dice5 from "./assets/dice5.svg";
-import dice6 from "./assets/dice6.svg";
 
 import { ReactComponent as Dice1 } from "./assets/dice1.svg";
 import { ReactComponent as Dice2 } from "./assets/dice2.svg";
@@ -14,17 +8,20 @@ import { ReactComponent as Dice4 } from "./assets/dice4.svg";
 import { ReactComponent as Dice5 } from "./assets/dice5.svg";
 import { ReactComponent as Dice6 } from "./assets/dice6.svg";
 
-import minus from "./assets/minus.svg";
-import plus from "./assets/plus.svg";
+import TopBar from "./components/topBar";
 import DiceScreen from "./components/diceScreen";
+import BetPanel from "./components/betPanel";
+import DiceSelection from "./components/diceSelection";
+import BetAmountPanel from "./components/betAmountPanel";
+import BetButton from "./components/betButton";
 
 const dices = [
-  { diceNumber: 1, diceImage: `${dice1}` },
-  { diceNumber: 2, diceImage: `${dice2}` },
-  { diceNumber: 3, diceImage: `${dice3}` },
-  { diceNumber: 4, diceImage: `${dice4}` },
-  { diceNumber: 5, diceImage: `${dice5}` },
-  { diceNumber: 6, diceImage: `${dice6}` },
+  { diceNumber: 1, diceImage: <Dice1 /> },
+  { diceNumber: 2, diceImage: <Dice2 /> },
+  { diceNumber: 3, diceImage: <Dice3 /> },
+  { diceNumber: 4, diceImage: <Dice4 /> },
+  { diceNumber: 5, diceImage: <Dice5 /> },
+  { diceNumber: 6, diceImage: <Dice6 /> },
 ];
 
 class App extends Component {
@@ -36,7 +33,7 @@ class App extends Component {
       diceSelected: 0,
       betAmount: 0,
       betDifference: 10,
-      gameStatus: "home",
+      gameStatus: "HOME",
       sideGenerated: 0,
     };
   }
@@ -48,7 +45,7 @@ class App extends Component {
       .then((data) => this.setState({ user: data }));
   };
 
-  //GET IMAGE LINK for DICE
+  //Get SVG for DICE
   getDiceImage = (searchDiceNumber) => {
     return dices.find(({ diceNumber }) => diceNumber === searchDiceNumber)
       .diceImage;
@@ -56,9 +53,6 @@ class App extends Component {
 
   componentDidMount() {
     this.loadUserData();
-  }
-  componentDidUpdate() {
-    //this.loadUserData();
   }
 
   //INCREASE BET on CLICK of +
@@ -133,59 +127,45 @@ class App extends Component {
   };
 
   render() {
-    const { user, betAmount } = this.state;
+    const {
+      user,
+      betAmount,
+      gameStatus,
+      diceSelected,
+      sideGenerated,
+      lastDiceSelected,
+    } = this.state;
 
     const sideGeneratedImage =
-      this.state.sideGenerated !== 0 &&
-      this.state.sideGenerated !== undefined &&
-      this.getDiceImage(this.state.sideGenerated);
+      sideGenerated !== 0 &&
+      sideGenerated !== undefined &&
+      this.getDiceImage(sideGenerated);
 
     const lastDiceSelectedImage =
-      this.state.lastDiceSelected !== 0 &&
-      this.getDiceImage(this.state.lastDiceSelected);
+      lastDiceSelected !== 0 && this.getDiceImage(lastDiceSelected);
 
     return (
       <div className="diceToss">
-        <div className="topBar">
-          <a href="/">{user.balance} V</a>
-        </div>
-
+        <TopBar balance={user.balance} />
         <DiceScreen
           lastDiceSelectedImage={lastDiceSelectedImage}
           sideGeneratedImage={sideGeneratedImage}
-          gameStatus={this.state.gameStatus}
-          betAmount={this.state.user.balance}
+          gameStatus={gameStatus}
+          betAmount={user.balance}
         />
-
-        <div className="betPanel">
-          <div className="betPanel__diceSlection">
-            <span className="betPanel__instructions">
-              Tap to change selection
-            </span>
-            <ul className="betPanel__dices" id="js-dices">
-              {dices.map((dice, i) => (
-                <li key={i}>
-                  <img
-                    src={dice.diceImage}
-                    width="44"
-                    alt={dice.diceNumber}
-                    onClick={() => this.selectDice(dice.diceNumber, i)}
-                  />
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="betPanel__amountPanel">
-            <img src={minus} alt="-" width="44" onClick={this.decreaceBet} />
-            <span>{betAmount}</span>
-            <img src={plus} alt="+" width="44" onClick={this.increaceBet} />
-          </div>
-
-          <div className="betPanel__button">
-            <span onClick={this.submitBet}>ROLL THE DICE MAN</span>
-          </div>
-        </div>
+        <BetPanel>
+          <DiceSelection dices={dices} selectDice={this.selectDice} />
+          <BetAmountPanel
+            betAmount={betAmount}
+            decreaceBet={this.decreaceBet}
+            increaceBet={this.increaceBet}
+          />
+          <BetButton
+            diceSelected={diceSelected}
+            betAmount={betAmount}
+            submitBet={this.submitBet}
+          />
+        </BetPanel>
       </div>
     );
   }

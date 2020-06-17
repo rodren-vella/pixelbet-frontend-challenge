@@ -1,43 +1,26 @@
-import React, { Component } from "react";
+import React from "react";
 import logo from "../assets/dice-logo.svg";
 
-class DiceScreen extends Component {
-  constructor() {
-    super();
-    this.state = {
-      selectedDice: "",
-    };
-  }
-
-  render() {
-    const {
-      lastDiceSelectedImage,
-      sideGeneratedImage,
-      gameStatus,
-      betAmount,
-    } = this.props;
-    return (
-      <div className="diceScreen">
-        {gameStatus === "home" && (
-          <img src={logo} alt="DICE TOSS" width="124" />
-        )}
-
-        {gameStatus === "WON" && (
-          <img src={lastDiceSelectedImage} width="144" alt="" className="won" />
-        )}
-        {gameStatus === "LOST" && (
-          <img src={sideGeneratedImage} width="144" alt="" className="loss" />
-        )}
-
-        {gameStatus === "WON" && (
-          <span className="diceScreen__amount">{betAmount}</span>
-        )}
-        {gameStatus !== "home" && (
-          <span className="diceScreen__outcome">{gameStatus}</span>
-        )}
-      </div>
-    );
-  }
-}
+const DiceScreen = ({
+  lastDiceSelectedImage,
+  sideGeneratedImage,
+  gameStatus,
+  betAmount,
+}) => {
+  return (
+    <div className="diceScreen">
+      {gameStatus === "HOME" ? (
+        <img src={logo} alt="DICE TOSS" width="124" />
+      ) : (
+        <div className={`diceScreen__result diceScreen__result--${gameStatus}`}>
+          {gameStatus === "WON" && lastDiceSelectedImage}
+          {gameStatus === "LOST" && sideGeneratedImage}
+          <span className="result__amount">{betAmount}</span>
+          <span className="result__outcome">{gameStatus}</span>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default DiceScreen;
