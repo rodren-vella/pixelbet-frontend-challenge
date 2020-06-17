@@ -3,7 +3,7 @@
 $purple: #5b15c5;
 $green: #46ffba;
 $pink: #ff2983;
-$text: rgba(255, 255, 255, 0.4);
+$lighttext: rgba(255, 255, 255, 0.4);
 $white: #ffffff;
 
 .won path {
@@ -12,7 +12,7 @@ $white: #ffffff;
 
 .diceToss {
   font-family: "Roboto", sans-serif;
-  color: $text;
+  color: $white;
   font-size: 10px;
   text-align: center;
   background: $purple;
@@ -32,9 +32,12 @@ $white: #ffffff;
     justify-content: flex-end;
     padding-right: 14px;
 
-    a {
-      color: $white;
-      text-decoration: none;
+    .down-arrow {
+      width: 10px;
+      margin-left: 5px;
+      polygon {
+        fill: $white;
+      }
     }
   }
   .diceScreen {
@@ -45,22 +48,43 @@ $white: #ffffff;
     flex-direction: column;
     color: $white;
 
-    .won {
-      filter: invert(0.5) sepia(1);
-      fill: $green;
-    }
-    .loss path {
-      fill: black;
+    &__result {
+      display: flex;
+      flex-direction: column;
+
+      &--WON {
+        svg {
+          width: 144px;
+
+          path {
+            fill: $green;
+          }
+        }
+      }
+      &--LOST {
+        svg {
+          width: 144px;
+
+          path {
+            fill: black;
+          }
+        }
+        .result__amount {
+          visibility: hidden;
+        }
+      }
     }
 
-    &__amount {
-      margin-top: 32px;
-      font-size: 32px;
-      font-weight: 700;
-    }
-    &__outcome {
-      font-size: 12px;
-      margin-top: 6px;
+    .result {
+      &__amount {
+        margin-top: 32px;
+        font-size: 32px;
+        font-weight: 700;
+      }
+      &__outcome {
+        font-size: 12px;
+        margin-top: 6px;
+      }
     }
   }
   .betPanel {
@@ -74,6 +98,7 @@ $white: #ffffff;
     &__instructions {
       display: inline-block;
       margin-bottom: 16px;
+      color: $lighttext;
     }
     &__dices {
       display: flex;
@@ -85,6 +110,10 @@ $white: #ffffff;
 
       li {
         margin-right: 12px;
+
+        svg {
+          width: 40px;
+        }
 
         &.selection-made {
           opacity: 0.1;
@@ -114,7 +143,11 @@ $white: #ffffff;
     }
 
     &__button {
-      span {
+      &--disable {
+        opacity: 0.4;
+      }
+
+      button {
         background: $pink;
         border: 0;
         width: calc(100% - 32px);
