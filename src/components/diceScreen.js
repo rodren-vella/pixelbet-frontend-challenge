@@ -11,9 +11,8 @@ class DiceScreen extends Component {
 
   render() {
     const {
-      gameInPlay,
       lastDiceSelectedImage,
-      diceSelectedImage,
+      sideGeneratedImage,
       gameStatus,
       betAmount,
     } = this.props;
@@ -23,21 +22,11 @@ class DiceScreen extends Component {
           <img src={logo} alt="DICE TOSS" width="124" />
         )}
 
-        {gameStatus !== "home" && gameInPlay === false && (
-          <img
-            src={diceSelectedImage}
-            width="144"
-            alt=""
-            className={gameStatus === "WON" ? "won" : "loss"}
-          />
+        {gameStatus === "WON" && (
+          <img src={lastDiceSelectedImage} width="144" alt="" className="won" />
         )}
-        {gameStatus !== "home" && gameInPlay === true && (
-          <img
-            src={lastDiceSelectedImage}
-            width="144"
-            alt=""
-            className={gameStatus === "WON" ? "won" : "loss"}
-          />
+        {gameStatus === "LOST" && (
+          <img src={sideGeneratedImage} width="144" alt="" className="loss" />
         )}
 
         {gameStatus === "WON" && (

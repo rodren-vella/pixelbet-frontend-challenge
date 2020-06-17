@@ -7,6 +7,13 @@ import dice4 from "./assets/dice4.svg";
 import dice5 from "./assets/dice5.svg";
 import dice6 from "./assets/dice6.svg";
 
+import { ReactComponent as Dice1 } from "./assets/dice1.svg";
+import { ReactComponent as Dice2 } from "./assets/dice2.svg";
+import { ReactComponent as Dice3 } from "./assets/dice3.svg";
+import { ReactComponent as Dice4 } from "./assets/dice4.svg";
+import { ReactComponent as Dice5 } from "./assets/dice5.svg";
+import { ReactComponent as Dice6 } from "./assets/dice6.svg";
+
 import minus from "./assets/minus.svg";
 import plus from "./assets/plus.svg";
 import DiceScreen from "./components/diceScreen";
@@ -30,30 +37,31 @@ class App extends Component {
       betAmount: 0,
       betDifference: 10,
       gameStatus: "home",
-      gameInPlay: false,
+      sideGenerated: 0,
     };
   }
 
+  //LOAD DATA from SERVER
   loadUserData = () => {
     fetch("http://localhost:3000/get-user/robouser")
       .then((response) => response.json())
       .then((data) => this.setState({ user: data }));
   };
 
+  //GET IMAGE LINK for DICE
   getDiceImage = (searchDiceNumber) => {
-    const foundDiceImage = dices.find(
-      ({ diceNumber }) => diceNumber === searchDiceNumber
-    ).diceImage;
-    return foundDiceImage;
+    return dices.find(({ diceNumber }) => diceNumber === searchDiceNumber)
+      .diceImage;
   };
 
   componentDidMount() {
     this.loadUserData();
   }
   componentDidUpdate() {
-    this.loadUserData();
+    //this.loadUserData();
   }
 
+  //INCREASE BET on CLICK of +
   increaceBet = () => {
     const newBetAmount =
       this.state.betAmount <= this.state.user.balance - this.state.betDifference
@@ -62,6 +70,7 @@ class App extends Component {
     this.setState({ betAmount: newBetAmount });
   };
 
+  //INCREASE BET on CLICK of -
   decreaceBet = () => {
     const newBetAmount =
       this.state.betAmount - this.state.betDifference >= 0
@@ -70,6 +79,7 @@ class App extends Component {
     this.setState({ betAmount: newBetAmount });
   };
 
+  //HIGHLIGHT selected dice and DIM others
   selectDice = (dice, i) => {
     if (this.state.diceSelected !== dice) {
       //IF PREVIOUS WASN'T 0 THAN REMOVE OLD SELECTION
@@ -94,7 +104,7 @@ class App extends Component {
         .childNodes[i].classList.toggle("active");
     }
 
-    this.setState({ gameInPlay: true, diceSelected: dice });
+    this.setState({ diceSelected: dice });
   };
 
   submitBet = () => {
@@ -111,12 +121,13 @@ class App extends Component {
       .then((data) => {
         console.log(data);
         if (data) {
-          console.log("POSTED", data.result);
           this.setState({
-            gameInPlay: false,
             gameStatus: data.result,
             lastDiceSelected: this.state.diceSelected,
+            sideGenerated: data.sideGenerated,
           });
+          console.log("POSTED", data.result);
+          this.loadUserData();
         }
       });
   };
@@ -124,12 +135,14 @@ class App extends Component {
   render() {
     const { user, betAmount } = this.state;
 
+    const sideGeneratedImage =
+      this.state.sideGenerated !== 0 &&
+      this.state.sideGenerated !== undefined &&
+      this.getDiceImage(this.state.sideGenerated);
+
     const lastDiceSelectedImage =
       this.state.lastDiceSelected !== 0 &&
       this.getDiceImage(this.state.lastDiceSelected);
-    const diceSelectedImage =
-      this.state.diceSelected !== 0 &&
-      this.getDiceImage(this.state.diceSelected);
 
     return (
       <div className="diceToss">
@@ -138,9 +151,8 @@ class App extends Component {
         </div>
 
         <DiceScreen
-          gameInPlay={this.state.gameInPlay}
           lastDiceSelectedImage={lastDiceSelectedImage}
-          diceSelectedImage={diceSelectedImage}
+          sideGeneratedImage={sideGeneratedImage}
           gameStatus={this.state.gameStatus}
           betAmount={this.state.user.balance}
         />
