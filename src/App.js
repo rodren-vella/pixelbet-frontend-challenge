@@ -15,7 +15,7 @@ import DiceSelection from "./components/diceSelection";
 import BetAmountPanel from "./components/betAmountPanel";
 import BetButton from "./components/betButton";
 
-const dices = [
+const allDice = [
   { diceNumber: 1, diceImage: <Dice1 /> },
   { diceNumber: 2, diceImage: <Dice2 /> },
   { diceNumber: 3, diceImage: <Dice3 /> },
@@ -25,8 +25,8 @@ const dices = [
 ];
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       user: {},
       lastDiceSelected: 0,
@@ -38,16 +38,26 @@ class App extends Component {
     };
   }
 
-  //LOAD DATA from SERVER
+  /**
+   * Load data from the Server API.
+   *
+   * @function loadUserData
+   */
   loadUserData = () => {
     fetch("http://localhost:3000/get-user/robouser")
       .then((response) => response.json())
       .then((data) => this.setState({ user: data }));
   };
 
-  //Get SVG for DICE
+  /**
+   * Get SVG Component for DICE.
+   *
+   * @function getDiceImage
+   * @param {number} DiceNumber
+   * @returns SVG React Component
+   */
   getDiceImage = (searchDiceNumber) => {
-    return dices.find(({ diceNumber }) => diceNumber === searchDiceNumber)
+    return allDice.find(({ diceNumber }) => diceNumber === searchDiceNumber)
       .diceImage;
   };
 
@@ -55,7 +65,12 @@ class App extends Component {
     this.loadUserData();
   }
 
-  //INCREASE BET on CLICK of +
+  /**
+   * INCREASE BET on CLICK of +
+   *
+   * Updates betAmount state with new betting amount
+   * @function increaceBet
+   */
   increaceBet = () => {
     const newBetAmount =
       this.state.betAmount <= this.state.user.balance - this.state.betDifference
@@ -64,7 +79,12 @@ class App extends Component {
     this.setState({ betAmount: newBetAmount });
   };
 
-  //INCREASE BET on CLICK of -
+  /**
+   * DECREASE BET on CLICK of -
+   *
+   * Updates betAmount state with new betting amount
+   * @function decreaceBet
+   */
   decreaceBet = () => {
     const newBetAmount =
       this.state.betAmount - this.state.betDifference >= 0
@@ -73,34 +93,45 @@ class App extends Component {
     this.setState({ betAmount: newBetAmount });
   };
 
-  //HIGHLIGHT selected dice and DIM others
+  /**
+   * HIGHLIGHT selected dice and DIM others
+   *
+   * @function selectDice
+   * @param {dice} number Chosen dice number
+   * @param {i} number index
+   */
   selectDice = (dice, i) => {
     if (this.state.diceSelected !== dice) {
-      //IF PREVIOUS WASN'T 0 THAN REMOVE OLD SELECTION
+      //IF A DICE WAS ALREADY CHOSEN BEFORE THIS ONE, THAN REMOVE OLD DICE SELECTION
       if (this.state.diceSelected !== 0) {
         document
-          .getElementById("js-dices")
+          .getElementById("js-alldice")
           .childNodes[this.state.diceSelected - 1].classList.toggle("active");
       }
 
-      //FIRST SELECTION, DIM ALL
+      //FIRST SELECTION MADE so DIM ALL DICE
       if (this.state.diceSelected === 0) {
-        dices.map((dice, i) =>
+        allDice.map((dice, i) =>
           document
-            .getElementById("js-dices")
+            .getElementById("js-alldice")
             .childNodes[i].classList.add("selection-made")
         );
       }
 
-      //TOGGLE ACTIVE CLASS
+      //SET ACTIVE CLASS to CHOSEN DICE
       document
-        .getElementById("js-dices")
+        .getElementById("js-alldice")
         .childNodes[i].classList.toggle("active");
     }
 
     this.setState({ diceSelected: dice });
   };
 
+  /**
+   * SUBMIT BET
+   *
+   * @function submitBet
+   */
   submitBet = () => {
     fetch("http://localhost:3000/roll-dice", {
       method: "post",
@@ -113,14 +144,15 @@ class App extends Component {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data) {
+          //UPDATE STATES WITH NEW INFO
           this.setState({
             gameStatus: data.result,
             lastDiceSelected: this.state.diceSelected,
             sideGenerated: data.sideGenerated,
           });
-          console.log("POSTED", data.result);
+
+          //LOAD NEW DATA FROM SERVER API
           this.loadUserData();
         }
       });
@@ -136,11 +168,13 @@ class App extends Component {
       lastDiceSelected,
     } = this.state;
 
+    //Get SVG React Component for the Random Dice Generated
     const sideGeneratedImage =
       sideGenerated !== 0 &&
       sideGenerated !== undefined &&
       this.getDiceImage(sideGenerated);
 
+    //Get SVG React Component for the Last Dice Chosen by user
     const lastDiceSelectedImage =
       lastDiceSelected !== 0 && this.getDiceImage(lastDiceSelected);
 
@@ -154,7 +188,7 @@ class App extends Component {
           betAmount={user.balance}
         />
         <BetPanel>
-          <DiceSelection dices={dices} selectDice={this.selectDice} />
+          <DiceSelection allDice={allDice} selectDice={this.selectDice} />
           <BetAmountPanel
             betAmount={betAmount}
             decreaceBet={this.decreaceBet}
