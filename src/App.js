@@ -15,15 +15,6 @@ import DiceSelection from "./components/diceSelection";
 import BetAmountPanel from "./components/betAmountPanel";
 import BetButton from "./components/betButton";
 
-const allDice = [
-  { diceNumber: 1, diceImage: <Dice1 /> },
-  { diceNumber: 2, diceImage: <Dice2 /> },
-  { diceNumber: 3, diceImage: <Dice3 /> },
-  { diceNumber: 4, diceImage: <Dice4 /> },
-  { diceNumber: 5, diceImage: <Dice5 /> },
-  { diceNumber: 6, diceImage: <Dice6 /> },
-];
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +26,14 @@ class App extends Component {
       betDifference: 10,
       gameStatus: "HOME",
       sideGenerated: 0,
+      allDice: [
+        { diceNumber: 1, diceImage: <Dice1 /> },
+        { diceNumber: 2, diceImage: <Dice2 /> },
+        { diceNumber: 3, diceImage: <Dice3 /> },
+        { diceNumber: 4, diceImage: <Dice4 /> },
+        { diceNumber: 5, diceImage: <Dice5 /> },
+        { diceNumber: 6, diceImage: <Dice6 /> },
+      ],
     };
   }
 
@@ -47,18 +46,6 @@ class App extends Component {
     fetch("http://localhost:3000/get-user/robouser")
       .then((response) => response.json())
       .then((data) => this.setState({ user: data }));
-  };
-
-  /**
-   * Get SVG Component for DICE.
-   *
-   * @function getDiceImage
-   * @param {number} DiceNumber
-   * @returns SVG React Component
-   */
-  getDiceImage = (searchDiceNumber) => {
-    return allDice.find(({ diceNumber }) => diceNumber === searchDiceNumber)
-      .diceImage;
   };
 
   componentDidMount() {
@@ -101,6 +88,7 @@ class App extends Component {
    * @param {i} number index
    */
   selectDice = (dice, i) => {
+    //RUN ONLY IF THE NEW SELECTION IS NOT THE SAME AS THE PREVIOUS
     if (this.state.diceSelected !== dice) {
       //IF A DICE WAS ALREADY CHOSEN BEFORE THIS ONE, THAN REMOVE OLD DICE SELECTION
       if (this.state.diceSelected !== 0) {
@@ -111,7 +99,7 @@ class App extends Component {
 
       //FIRST SELECTION MADE so DIM ALL DICE
       if (this.state.diceSelected === 0) {
-        allDice.map((dice, i) =>
+        this.state.allDice.map((dice, i) =>
           document
             .getElementById("js-alldice")
             .childNodes[i].classList.add("selection-made")
@@ -122,9 +110,9 @@ class App extends Component {
       document
         .getElementById("js-alldice")
         .childNodes[i].classList.toggle("active");
-    }
 
-    this.setState({ diceSelected: dice });
+      this.setState({ diceSelected: dice });
+    }
   };
 
   /**
@@ -166,24 +154,16 @@ class App extends Component {
       diceSelected,
       sideGenerated,
       lastDiceSelected,
+      allDice,
     } = this.state;
-
-    //Get SVG React Component for the Random Dice Generated
-    const sideGeneratedImage =
-      sideGenerated !== 0 &&
-      sideGenerated !== undefined &&
-      this.getDiceImage(sideGenerated);
-
-    //Get SVG React Component for the Last Dice Chosen by user
-    const lastDiceSelectedImage =
-      lastDiceSelected !== 0 && this.getDiceImage(lastDiceSelected);
 
     return (
       <div className="diceToss">
         <TopBar balance={user.balance} />
         <DiceScreen
-          lastDiceSelectedImage={lastDiceSelectedImage}
-          sideGeneratedImage={sideGeneratedImage}
+          allDice={allDice}
+          sideGenerated={sideGenerated}
+          lastDiceSelected={lastDiceSelected}
           gameStatus={gameStatus}
           betAmount={user.balance}
         />
