@@ -53,6 +53,17 @@ class App extends Component {
   }
 
   /**
+   * GET Array Index of Dice passed in param
+   *
+   * @function getDiceIndex
+   * @param {searchDiceNumber} number
+   */
+  getDiceIndex = (searchDiceNumber) => {
+    const isDice = (dice) => dice.diceNumber === searchDiceNumber;
+    return this.state.allDice.findIndex(isDice);
+  };
+
+  /**
    * INCREASE BET on CLICK of +
    *
    * Updates betAmount state with new betting amount
@@ -94,7 +105,9 @@ class App extends Component {
       if (this.state.diceSelected !== 0) {
         document
           .getElementById("js-alldice")
-          .childNodes[this.state.diceSelected - 1].classList.toggle("active");
+          .childNodes[
+            this.getDiceIndex(this.state.diceSelected)
+          ].classList.toggle("active");
       }
 
       //FIRST SELECTION MADE so DIM ALL DICE
