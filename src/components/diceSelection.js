@@ -1,13 +1,21 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { selectMyDice } from "./actions";
 
-const diceSelection = ({ allDice, selectDice }) => {
+const DiceSelection = () => {
+  //const myBetAmount = useSelector((state) => state.betAmount.betAmount);
+  const allMyDice = useSelector((state) => state.selectDice.allDice);
+  const dispatch = useDispatch();
   return (
     <div className="betPanel__diceSlection">
       <span className="betPanel__instructions">Tap to change selection</span>
       <ul className="betPanel__alldice" id="js-alldice">
-        {allDice.map((dice, i) => (
-          <li key={i} onClick={() => selectDice(dice.diceNumber, i)}>
-            {dice.diceImage}
+        {allMyDice.map((dice, i) => (
+          <li
+            key={i}
+            onClick={() => dispatch(selectMyDice(allMyDice[i].diceNumber, i))}
+          >
+            {allMyDice[i].diceImage}
           </li>
         ))}
       </ul>
@@ -15,4 +23,4 @@ const diceSelection = ({ allDice, selectDice }) => {
   );
 };
 
-export default diceSelection;
+export default DiceSelection;

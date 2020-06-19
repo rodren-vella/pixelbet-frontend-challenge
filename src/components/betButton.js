@@ -1,9 +1,14 @@
 import React from "react";
 
-const betbutton = ({ diceSelected, betAmount, submitBet }) => {
+import { useSelector, useDispatch } from "react-redux";
+import { decreaceMyBet, increaceMyBet } from "./actions";
+
+const Betbutton = ({ diceSelected, betAmount, submitBet }) => {
+  const myBetAmount = useSelector((state) => state.betAmount.betAmount);
+
   //CHECK FOR DICE SELECTION AND BET AMOUNT BEFORE WE CAN PLAY
   const checkIfWeCanPlay = () => {
-    const checkIfWeCanPlay = betAmount > 0 && diceSelected > 0 ? false : true;
+    const checkIfWeCanPlay = myBetAmount > 0 && diceSelected > 0 ? false : true;
     return checkIfWeCanPlay;
   };
 
@@ -20,4 +25,4 @@ const betbutton = ({ diceSelected, betAmount, submitBet }) => {
   );
 };
 
-export default betbutton;
+export default Betbutton;

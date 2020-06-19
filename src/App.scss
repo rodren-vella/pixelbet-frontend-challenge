@@ -6,6 +6,10 @@ $pink: #ff2983;
 $lighttext: rgba(255, 255, 255, 0.4);
 $white: #ffffff;
 
+body {
+  margin: 0;
+}
+
 .won path {
   fill: $green;
 }
