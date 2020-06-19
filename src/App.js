@@ -1,40 +1,40 @@
-import React, { Component } from "react";
-import "./App.scss";
+import React, { Component } from 'react'
+import './App.scss'
 
-import { ReactComponent as Dice1 } from "./assets/dice1.svg";
-import { ReactComponent as Dice2 } from "./assets/dice2.svg";
-import { ReactComponent as Dice3 } from "./assets/dice3.svg";
-import { ReactComponent as Dice4 } from "./assets/dice4.svg";
-import { ReactComponent as Dice5 } from "./assets/dice5.svg";
-import { ReactComponent as Dice6 } from "./assets/dice6.svg";
+import { ReactComponent as Dice1 } from './assets/dice1.svg'
+import { ReactComponent as Dice2 } from './assets/dice2.svg'
+import { ReactComponent as Dice3 } from './assets/dice3.svg'
+import { ReactComponent as Dice4 } from './assets/dice4.svg'
+import { ReactComponent as Dice5 } from './assets/dice5.svg'
+import { ReactComponent as Dice6 } from './assets/dice6.svg'
 
-import TopBar from "./components/topBar";
-import DiceScreen from "./components/diceScreen";
-import BetPanel from "./components/betPanel";
-import DiceSelection from "./components/diceSelection";
-import BetAmountPanel from "./components/betAmountPanel";
-import BetButton from "./components/betButton";
+import TopBar from './components/topBar'
+import DiceScreen from './components/diceScreen'
+import BetPanel from './components/betPanel'
+import DiceSelection from './components/diceSelection'
+import BetAmountPanel from './components/betAmountPanel'
+import BetButton from './components/betButton'
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       user: {},
-      lastDiceSelected: 0,
-      diceSelected: 0,
+      gameStatus: 'HOME',
       betAmount: 0,
       betDifference: 10,
-      gameStatus: "HOME",
       sideGenerated: 0,
+      previousSelection: 0,
+      currentSelection: 0,
       allDice: [
-        { diceNumber: 1, diceImage: <Dice1 /> },
-        { diceNumber: 2, diceImage: <Dice2 /> },
-        { diceNumber: 3, diceImage: <Dice3 /> },
-        { diceNumber: 4, diceImage: <Dice4 /> },
-        { diceNumber: 5, diceImage: <Dice5 /> },
-        { diceNumber: 6, diceImage: <Dice6 /> },
+        { number: 1, image: <Dice1 /> },
+        { number: 2, image: <Dice2 /> },
+        { number: 3, image: <Dice3 /> },
+        { number: 4, image: <Dice4 /> },
+        { number: 5, image: <Dice5 /> },
+        { number: 6, image: <Dice6 /> },
       ],
-    };
+    }
   }
 
   /**
@@ -43,159 +43,162 @@ class App extends Component {
    * @function loadUserData
    */
   loadUserData = () => {
-    fetch("http://localhost:3000/get-user/robouser")
+    fetch('http://localhost:3000/get-user/robouser')
       .then((response) => response.json())
-      .then((data) => this.setState({ user: data }));
-  };
+      .then((data) => this.setState({ user: data }))
+  }
 
   componentDidMount() {
-    this.loadUserData();
+    this.loadUserData()
   }
 
   /**
-   * GET Array Index of Dice passed in param
+   * Returns the array index of the dice passed as a parameter.
    *
-   * @function getDiceIndex
-   * @param {searchDiceNumber} number
+   * @param {Number} searchDiceNumber
+   * @returns {Number}
    */
   getDiceIndex = (searchDiceNumber) => {
-    const isDice = (dice) => dice.diceNumber === searchDiceNumber;
-    return this.state.allDice.findIndex(isDice);
-  };
+    const isDice = (dice) => dice.number === searchDiceNumber
+    return this.state.allDice.findIndex(isDice)
+  }
 
   /**
-   * INCREASE BET on CLICK of +
+   * Increases bet stake amount by betDifference, until it reaches the user's full purse.
    *
-   * Updates betAmount state with new betting amount
-   * @function increaceBet
+   * @returns {Undefined}
    */
   increaceBet = () => {
     const newBetAmount =
       this.state.betAmount <= this.state.user.balance - this.state.betDifference
         ? this.state.betAmount + this.state.betDifference
-        : this.state.betAmount;
-    this.setState({ betAmount: newBetAmount });
-  };
+        : this.state.betAmount
+    this.setState({
+      betAmount: newBetAmount,
+    })
+  }
 
   /**
-   * DECREASE BET on CLICK of -
+   * Decreases bet stake amount by betDifference, until it reaches 0.
    *
-   * Updates betAmount state with new betting amount
-   * @function decreaceBet
+   * @returns {Undefined}
    */
   decreaceBet = () => {
     const newBetAmount =
       this.state.betAmount - this.state.betDifference >= 0
         ? this.state.betAmount - this.state.betDifference
-        : this.state.betAmount;
-    this.setState({ betAmount: newBetAmount });
-  };
+        : this.state.betAmount
+    this.setState({
+      betAmount: newBetAmount,
+    })
+  }
 
   /**
-   * HIGHLIGHT selected dice and DIM others
+   * Highlights the selected dice, and dims the rest.
    *
-   * @function selectDice
-   * @param {dice} number Chosen dice number
-   * @param {i} number index
+   * Runs only if the new selection is not the same as the previous.
+   * If a dice was already chosen before this one, than remove old dice selection from active.
+   * On first selection, dims all dice and sets selected dice as active.
+   *
+   * @param {Number} dice - The chosen dice value.
+   * @param {Number} i - The index of the selected dice.
+   *
+   * @returns {Undefined}
    */
   selectDice = (dice, i) => {
-    //RUN ONLY IF THE NEW SELECTION IS NOT THE SAME AS THE PREVIOUS
-    if (this.state.diceSelected !== dice) {
-      //IF A DICE WAS ALREADY CHOSEN BEFORE THIS ONE, THAN REMOVE OLD DICE SELECTION
-      if (this.state.diceSelected !== 0) {
-        document
-          .getElementById("js-alldice")
-          .childNodes[
-            this.getDiceIndex(this.state.diceSelected)
-          ].classList.toggle("active");
-      }
+    if (this.state.currentSelection === dice) return
 
-      //FIRST SELECTION MADE so DIM ALL DICE
-      if (this.state.diceSelected === 0) {
-        this.state.allDice.map((dice, i) =>
-          document
-            .getElementById("js-alldice")
-            .childNodes[i].classList.add("selection-made")
-        );
-      }
+    const allDiceElements = document.getElementById('js-alldice')
 
-      //SET ACTIVE CLASS to CHOSEN DICE
-      document
-        .getElementById("js-alldice")
-        .childNodes[i].classList.toggle("active");
-
-      this.setState({ diceSelected: dice });
+    if (this.state.currentSelection !== 0) {
+      allDiceElements.childNodes[
+        this.getDiceIndex(this.state.currentSelection)
+      ].classList.toggle('bet-panel__dice-item--active')
+    } else if (this.state.currentSelection === 0) {
+      this.state.allDice.map((dice, i) =>
+        allDiceElements.childNodes[i].classList.add(
+          'bet-panel__dice-item--inactive',
+        ),
+      )
     }
-  };
+
+    allDiceElements.childNodes[i].classList.toggle(
+      'bet-panel__dice-item--active',
+    )
+
+    this.setState({
+      currentSelection: dice,
+    })
+  }
 
   /**
-   * SUBMIT BET
+   * Submits the user's bet to the API, which will then update the state.
    *
-   * @function submitBet
+   * @returns {Undefined}
    */
   submitBet = () => {
-    fetch("http://localhost:3000/roll-dice", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
+    fetch('http://localhost:3000/roll-dice', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         username: this.state.user.username,
         betAmount: this.state.betAmount,
-        sideSelected: this.state.diceSelected,
+        sideSelected: this.state.currentSelection,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data) {
-          //UPDATE STATES WITH NEW INFO
-          this.setState({
-            gameStatus: data.result,
-            lastDiceSelected: this.state.diceSelected,
-            sideGenerated: data.sideGenerated,
-          });
+        if (!data) return
 
-          //LOAD NEW DATA FROM SERVER API
-          this.loadUserData();
-        }
-      });
-  };
+        this.setState({
+          gameStatus: data.result,
+          previousSelection: this.state.currentSelection,
+          sideGenerated: data.sideGenerated,
+        })
+
+        this.loadUserData()
+      })
+  }
 
   render() {
     const {
       user,
       betAmount,
       gameStatus,
-      diceSelected,
+      currentSelection,
       sideGenerated,
-      lastDiceSelected,
+      previousSelection,
       allDice,
-    } = this.state;
+    } = this.state
 
     return (
-      <div className="diceToss">
+      <React.Fragment>
         <TopBar balance={user.balance} />
         <DiceScreen
           allDice={allDice}
           sideGenerated={sideGenerated}
-          lastDiceSelected={lastDiceSelected}
+          previousSelection={previousSelection}
           gameStatus={gameStatus}
           betAmount={user.balance}
         />
         <BetPanel>
-          <DiceSelection allDice={allDice} selectDice={this.selectDice} />
+          <DiceSelection allDice={allDice} selectDice={this.selectDice} />{' '}
           <BetAmountPanel
             betAmount={betAmount}
             decreaceBet={this.decreaceBet}
             increaceBet={this.increaceBet}
           />
           <BetButton
-            diceSelected={diceSelected}
+            currentSelection={currentSelection}
             betAmount={betAmount}
             submitBet={this.submitBet}
           />
         </BetPanel>
-      </div>
-    );
+      </React.Fragment>
+    )
   }
 }
 
-export default App;
+export default App

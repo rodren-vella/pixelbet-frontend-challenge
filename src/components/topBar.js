@@ -1,12 +1,13 @@
-import React from "react";
-import { ReactComponent as DownArrow } from "../assets/down-arrow.svg";
+import React from 'react'
+import { ReactComponent as DownArrow } from '../assets/down-arrow.svg'
 
 const topBar = ({ balance }) => {
   return (
-    <div className="topBar">
-      {balance} <DownArrow className="down-arrow" />
-    </div>
-  );
-};
+    <header className="header">
+      <span className="header__balance">{balance}</span>
+      <DownArrow className="header__icon" />
+    </header>
+  )
+}
 
-export default topBar;
+export default topBar

@@ -1,18 +1,24 @@
-import React from "react";
+import React from 'react'
 
 const diceSelection = ({ allDice, selectDice }) => {
   return (
-    <div className="betPanel__diceSlection">
-      <span className="betPanel__instructions">Tap to change selection</span>
-      <ul className="betPanel__alldice" id="js-alldice">
+    <div className="bet-panel__dice-selection">
+      <span className="bet-panel__dice-instructions">
+        Tap to change selection
+      </span>
+      <ul className="bet-panel__dice-alldice" id="js-alldice">
         {allDice.map((dice, i) => (
-          <li key={i} onClick={() => selectDice(dice.diceNumber, i)}>
-            {dice.diceImage}
+          <li
+            key={i}
+            onClick={() => selectDice(dice.number, i)}
+            className="bet-panel__dice-item"
+          >
+            {dice.image}
           </li>
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default diceSelection;
+export default diceSelection

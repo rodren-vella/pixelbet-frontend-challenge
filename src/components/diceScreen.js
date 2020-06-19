@@ -1,32 +1,46 @@
-import React from "react";
-import logo from "../assets/dice-logo.svg";
+import React, { Component } from 'react'
+import logo from '../assets/dice-logo.svg'
 
+/**
+ * Returns the SVG React Component of the dice number passed as a parameter.
+ *
+ * @param {Array} allDice - Array of dice numbers and their images.
+ * @param {number} searchDiceNumber - Dice number we want the image for.
+ * @returns {Component}
+ */
 const getDiceImage = (allDice, searchDiceNumber) => {
-  return allDice.find(({ diceNumber }) => diceNumber === searchDiceNumber)
-    .diceImage;
-};
+  return allDice.find(({ number }) => number === searchDiceNumber).image
+}
 
 const DiceScreen = ({
   allDice,
   sideGenerated,
-  lastDiceSelected,
+  previousSelection,
   gameStatus,
   betAmount,
 }) => {
   return (
-    <div className="diceScreen">
-      {gameStatus === "HOME" ? (
+    <div className="dice-screen">
+      {gameStatus === 'HOME' ? (
         <img src={logo} alt="DICE TOSS" width="124" />
       ) : (
-        <div className={`diceScreen__result diceScreen__result--${gameStatus}`}>
-          {gameStatus === "WON" && getDiceImage(allDice, lastDiceSelected)}
-          {gameStatus === "LOST" && getDiceImage(allDice, sideGenerated)}
-          <span className="result__amount">{betAmount}</span>
-          <span className="result__outcome">{gameStatus}</span>
+        <div
+          className={`dice-screen__result dice-screen__result--${gameStatus}`}
+        >
+          {gameStatus === 'WON' && getDiceImage(allDice, previousSelection)}
+          {gameStatus === 'LOST' && getDiceImage(allDice, sideGenerated)}
+          <span
+            className={`dice-screen__balance dice-screen__balance--${gameStatus}`}
+          >
+            {betAmount}
+          </span>
+          <span className="dice-screen__verdict">
+            {gameStatus === 'WON' ? 'WIN' : 'Loss'}
+          </span>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default DiceScreen;
+export default DiceScreen

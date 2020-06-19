@@ -1,23 +1,32 @@
-import React from "react";
+import React from 'react'
 
-const betbutton = ({ diceSelected, betAmount, submitBet }) => {
-  //CHECK FOR DICE SELECTION AND BET AMOUNT BEFORE WE CAN PLAY
+const betbutton = ({ currentSelection, betAmount, submitBet }) => {
+  /**
+   * Check that a bet amount has been set and a dice has been selected
+   *
+   * @returns {boolean}
+   */
   const checkIfWeCanPlay = () => {
-    const checkIfWeCanPlay = betAmount > 0 && diceSelected > 0 ? false : true;
-    return checkIfWeCanPlay;
-  };
+    const checkIfWeCanPlay =
+      betAmount > 0 && currentSelection > 0 ? false : true
+    return checkIfWeCanPlay
+  }
 
   return (
     <div
-      className={`betPanel__button ${
-        checkIfWeCanPlay() && "betPanel__button--disable"
+      className={`bet-panel__button ${
+        checkIfWeCanPlay() && 'bet-panel__button--disable'
       }`}
     >
-      <button disabled={checkIfWeCanPlay()} onClick={submitBet}>
+      <button
+        disabled={checkIfWeCanPlay()}
+        onClick={submitBet}
+        className="bet-panel__button-item"
+      >
         ROLL THE DICE MAN
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default betbutton;
+export default betbutton
