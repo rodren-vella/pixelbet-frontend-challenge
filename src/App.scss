@@ -1,163 +1,169 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
-$purple: #5b15c5;
-$green: #46ffba;
-$pink: #ff2983;
-$lighttext: rgba(255, 255, 255, 0.4);
-$white: #ffffff;
+$PurpleHeart: #5b15c5;
+$Aquamarine: #46ffba;
+$WildStrawberry: #ff2983;
+$Black10: rgba(0, 0, 0, 0.1);
+$White40: rgba(255, 255, 255, 0.4);
+$White: #ffffff;
+$Black: #000000;
 
-.won path {
-  fill: $green;
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  color: $White;
+  text-align: center;
+  background: $PurpleHeart;
 }
 
-.diceToss {
-  font-family: "Roboto", sans-serif;
-  color: $white;
-  font-size: 10px;
-  text-align: center;
-  background: $purple;
-  height: 100vh;
+#root {
   display: flex;
   flex-direction: column;
+  height: 100vh;
+}
 
-  .topBar {
-    height: 64px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.header {
+  height: 64px;
+  border-bottom: 1px solid $Black10;
+  font-weight: 700;
+  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 14px;
+
+  &__icon {
+    width: 10px;
+    margin-left: 5px;
+
+    polygon {
+      fill: $White;
+    }
+  }
+}
+
+.dice-screen {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding-top: 32px;
+  align-items: center;
+  color: $White;
+
+  &__result {
+    display: flex;
+    flex-direction: column;
+
+    svg {
+      width: 124px;
+    }
+
+    &--WON {
+      svg path {
+        fill: $Aquamarine;
+      }
+    }
+
+    &--LOST {
+      svg path {
+        fill: $Black;
+      }
+    }
+  }
+
+  &__balance {
+    margin-top: 32px;
+    font-size: 32px;
     font-weight: 700;
-    font-size: 14px;
 
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 14px;
-
-    .down-arrow {
-      width: 10px;
-      margin-left: 5px;
-      polygon {
-        fill: $white;
-      }
+    &--LOST {
+      visibility: hidden;
     }
   }
-  .diceScreen {
-    padding-top: 32px;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    color: $white;
 
-    &__result {
-      display: flex;
-      flex-direction: column;
-
-      &--WON {
-        svg {
-          width: 144px;
-
-          path {
-            fill: $green;
-          }
-        }
-      }
-      &--LOST {
-        svg {
-          width: 144px;
-
-          path {
-            fill: black;
-          }
-        }
-        .result__amount {
-          visibility: hidden;
-        }
-      }
-    }
-
-    .result {
-      &__amount {
-        margin-top: 32px;
-        font-size: 32px;
-        font-weight: 700;
-      }
-      &__outcome {
-        font-size: 12px;
-        margin-top: 6px;
-      }
-    }
+  &__verdict {
+    margin-top: 5px;
+    font-size: 12px;
   }
-  .betPanel {
-    background: rgba(0, 0, 0, 0.1);
-    padding: 16px 0 32px;
-    display: flex;
-    flex-direction: column;
+}
 
-    &__diceSelection {
-    }
-    &__instructions {
+.bet-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0 32px;
+  background: $Black10;
+
+  &__dice {
+    &-instructions {
       display: inline-block;
       margin-bottom: 16px;
-      color: $lighttext;
+      color: $White40;
     }
-    &__alldice {
+
+    &-alldice {
       display: flex;
       align-items: center;
       justify-content: center;
       list-style: none;
       margin: 0;
       padding: 0;
-
-      li {
-        margin-right: 12px;
-
-        svg {
-          width: 40px;
-        }
-
-        &.selection-made {
-          opacity: 0.1;
-        }
-        &.active {
-          opacity: 1;
-        }
-        &:last-child {
-          margin-right: 0;
-        }
-      }
     }
 
-    &__amountPanel {
-      font-size: 32px;
-      font-weight: 700;
-      margin: 40px 0 32px;
+    &-item {
+      margin-right: 12px;
 
+      svg {
+        width: 40px;
+      }
+
+      &--inactive {
+        opacity: 0.1;
+      }
+
+      &--active {
+        opacity: 1;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__bet {
+    &-amount {
       display: flex;
       align-items: center;
       justify-content: center;
-
-      span {
-        margin: 0 16px;
-        color: $white;
-      }
+      font-size: 32px;
+      font-weight: 700;
+      margin: 40px 0 32px;
     }
 
-    &__button {
-      &--disable {
-        opacity: 0.4;
-      }
+    &-value {
+      margin: 0 16px;
+      color: $White;
+    }
+  }
 
-      button {
-        background: $pink;
-        border: 0;
-        width: calc(100% - 32px);
-        display: inline-block;
-        padding: 15px 0;
-        border-radius: 32px;
-        text-decoration: none;
-        font-size: 12px;
-        color: $white;
-        font-weight: 700;
-      }
+  &__button {
+    &--disable {
+      opacity: 0.4;
+    }
+
+    &-item {
+      background: $WildStrawberry;
+      border: 0;
+      width: calc(100% - 32px);
+      display: inline-block;
+      padding: 15px 0;
+      border-radius: 32px;
+      text-decoration: none;
+      font-size: 12px;
+      color: $White;
+      font-weight: 700;
     }
   }
 }
