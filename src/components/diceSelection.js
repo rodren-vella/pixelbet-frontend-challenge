@@ -1,6 +1,19 @@
 import React from 'react'
 
-const diceSelection = ({ allDice, selectDice }) => {
+const diceSelection = ({ allDice, selectDice, currentSelection }) => {
+  const diceClassName = []
+
+  allDice.forEach((diceItem, i) => {
+    if (allDice[i].number === currentSelection) {
+      diceClassName.push('bet-panel__dice-item--active')
+    } else if (currentSelection > 0) {
+      diceClassName.push('bet-panel__dice-item--inactive')
+    }
+    //console.log('allDice.image', allDice[i].number, currentSelection)
+  })
+
+  //console.log('diceClassName', diceClassName)
+
   return (
     <div className="bet-panel__dice-selection">
       <span className="bet-panel__dice-instructions">
@@ -11,7 +24,7 @@ const diceSelection = ({ allDice, selectDice }) => {
           <li
             key={i}
             onClick={() => selectDice(dice.number, i)}
-            className="bet-panel__dice-item"
+            className={`bet-panel__dice-item ${diceClassName[i]}`}
           >
             {dice.image}
           </li>

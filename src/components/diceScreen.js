@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import logo from '../assets/dice-logo.svg'
+import { getDiceImage } from './utils'
 
 /**
  * Returns the SVG React Component of the dice number passed as a parameter.
@@ -8,9 +9,6 @@ import logo from '../assets/dice-logo.svg'
  * @param {number} searchDiceNumber - Dice number we want the image for.
  * @returns {Component}
  */
-const getDiceImage = (allDice, searchDiceNumber) => {
-  return allDice.find(({ number }) => number === searchDiceNumber).image
-}
 
 const DiceScreen = ({
   allDice,

@@ -14,6 +14,7 @@ import BetPanel from './components/betPanel'
 import DiceSelection from './components/diceSelection'
 import BetAmountPanel from './components/betAmountPanel'
 import BetButton from './components/betButton'
+import Profile from './components/profile'
 
 class App extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class App extends Component {
     this.state = {
       user: {},
       gameStatus: 'HOME',
+      gamePage: 'HOME',
       betAmount: 0,
       betDifference: 10,
       sideGenerated: 0,
@@ -94,6 +96,18 @@ class App extends Component {
   }
 
   /**
+   * Toggle Page between Home and History
+   *
+   * @returns {Undefined}
+   */
+  togglePage = () => {
+    const togglePage = this.state.gamePage === 'HOME' ? 'HISTORY' : 'HOME'
+    this.setState({
+      gamePage: togglePage,
+    })
+  }
+
+  /**
    * Highlights the selected dice, and dims the rest.
    *
    * Runs only if the new selection is not the same as the previous.
@@ -106,9 +120,12 @@ class App extends Component {
    * @returns {Undefined}
    */
   selectDice = (dice, i) => {
-    if (this.state.currentSelection === dice) return
+    //if (this.state.currentSelection === dice) return
 
     const allDiceElements = document.getElementById('js-alldice')
+
+    console.log('allDiceElements', allDiceElements)
+    if (allDiceElements === undefined) return
 
     if (this.state.currentSelection !== 0) {
       allDiceElements.childNodes[
@@ -171,31 +188,42 @@ class App extends Component {
       sideGenerated,
       previousSelection,
       allDice,
+      gamePage,
     } = this.state
 
     return (
       <React.Fragment>
-        <TopBar balance={user.balance} />
-        <DiceScreen
-          allDice={allDice}
-          sideGenerated={sideGenerated}
-          previousSelection={previousSelection}
-          gameStatus={gameStatus}
-          betAmount={user.balance}
-        />
-        <BetPanel>
-          <DiceSelection allDice={allDice} selectDice={this.selectDice} />{' '}
-          <BetAmountPanel
-            betAmount={betAmount}
-            decreaceBet={this.decreaceBet}
-            increaceBet={this.increaceBet}
-          />
-          <BetButton
-            currentSelection={currentSelection}
-            betAmount={betAmount}
-            submitBet={this.submitBet}
-          />
-        </BetPanel>
+        {gamePage === 'HOME' ? (
+          <React.Fragment>
+            <TopBar balance={user.balance} togglePage={this.togglePage} />
+            <DiceScreen
+              allDice={allDice}
+              sideGenerated={sideGenerated}
+              previousSelection={previousSelection}
+              gameStatus={gameStatus}
+              betAmount={user.balance}
+            />
+            <BetPanel>
+              <DiceSelection
+                allDice={allDice}
+                selectDice={this.selectDice}
+                currentSelection={currentSelection}
+              />
+              <BetAmountPanel
+                betAmount={betAmount}
+                decreaceBet={this.decreaceBet}
+                increaceBet={this.increaceBet}
+              />
+              <BetButton
+                currentSelection={currentSelection}
+                betAmount={betAmount}
+                submitBet={this.submitBet}
+              />
+            </BetPanel>
+          </React.Fragment>
+        ) : (
+          <Profile allDice={allDice} user={user} togglePage={this.togglePage} />
+        )}
       </React.Fragment>
     )
   }

@@ -1,20 +1,36 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 $PurpleHeart: #5b15c5;
 $Aquamarine: #46ffba;
 $WildStrawberry: #ff2983;
 $Black10: rgba(0, 0, 0, 0.1);
+$White10: rgba(255, 255, 255, 0.1);
 $White40: rgba(255, 255, 255, 0.4);
+$White60: rgba(255, 255, 255, 0.6);
 $White: #ffffff;
 $Black: #000000;
 
 body {
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 10px;
   color: $White;
   text-align: center;
   background: $PurpleHeart;
+}
+
+button {
+  display: inline-block;
+  background: $WildStrawberry;
+  border: 0;
+  width: calc(100% - 32px);
+  padding: 15px 0;
+  border-radius: 32px;
+  color: $White;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 #root {
@@ -23,16 +39,19 @@ body {
   height: 100vh;
 }
 
-.header {
+header {
   height: 64px;
-  border-bottom: 1px solid $Black10;
+  border-bottom: 1px solid $White10;
   font-weight: 700;
   font-size: 14px;
 
   display: flex;
   align-items: center;
+  padding: 0 16px;
+}
+
+.header {
   justify-content: flex-end;
-  padding-right: 14px;
 
   &__icon {
     width: 10px;
@@ -154,16 +173,105 @@ body {
     }
 
     &-item {
+      display: inline-block;
       background: $WildStrawberry;
       border: 0;
       width: calc(100% - 32px);
-      display: inline-block;
       padding: 15px 0;
       border-radius: 32px;
-      text-decoration: none;
-      font-size: 12px;
       color: $White;
+      font-size: 12px;
       font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+  }
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+
+  &-header {
+    position: sticky;
+    background: $PurpleHeart;
+    top: 0;
+  }
+
+  &-topup {
+    display: flex;
+    flex-direction: column;
+    &__credit {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 32px 0;
+    }
+  }
+
+  &-history {
+    display: flex;
+    flex-direction: column;
+    margin: 64px 0 24px 16px;
+    text-align: left;
+
+    &__title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    &__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    &__item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 64px;
+      padding: 0 24px 0 8px;
+
+      svg {
+        width: 16px;
+        margin: 0 24px 0 0;
+      }
+      &-column {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 50%;
+      }
+      &-info {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+      }
+      &-verdict {
+        font-size: 14px;
+        line-height: 20px;
+      }
+      &-timestamp {
+        font-size: 8px;
+        color: $White60;
+      }
+      &-margin {
+        font-size: 12px;
+        &::before {
+          content: '-';
+        }
+
+        &--WON {
+          color: $Aquamarine;
+          font-weight: 700;
+          &::before {
+            content: '+';
+          }
+        }
+      }
+      &-credit {
+        margin-left: auto;
+        font-size: 14px;
+      }
     }
   }
 }
