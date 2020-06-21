@@ -93,9 +93,10 @@ const profile = ({ user, allDice, togglePage }) => {
 
                 )}
 
+                {betHistoryReverse.length > 5 && (
                 <div className="profile__history-button" id="js-show-all-history">
-                    <button onClick={showAllItems}>show more</button>
-                </div>
+                        <button onClick={showAllItems}>show more</button>
+                </div>)}
             </div>
         </div>
     );
