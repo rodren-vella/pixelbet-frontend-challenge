@@ -1,6 +1,6 @@
 import React from "react";
 
-const betButton = ({ currentSelection, betAmount, submitBet }) => {
+const betButton = ({ currentSelection, betAmount, submitBet, balance }) => {
     /**
      * Check that a bet amount has been set and a dice has been selected
      *
@@ -8,7 +8,7 @@ const betButton = ({ currentSelection, betAmount, submitBet }) => {
      */
     const checkIfWeCanPlay = () => {
         const checkIfWeCanPlay =
-            betAmount > 0 && currentSelection > 0 ? false : true;
+            betAmount > 0 && currentSelection > 0 && (balance >= betAmount) ? false : true;
         return checkIfWeCanPlay;
     };
 

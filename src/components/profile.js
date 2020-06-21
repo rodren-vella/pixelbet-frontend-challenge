@@ -18,11 +18,8 @@ const profile = ({ user, allDice, togglePage }) => {
 
     return (
         <div className="page-holder profile" id="js-profile">
-            <header
-                className="profile__header header header--profile"
-                onClick={togglePage}
-            >
-                <ArrowBack width="10" />
+            <header className="profile__header header header--profile">
+                <ArrowBack width="10" className="header__icon"onClick={togglePage} />
             </header>
 
             <div className="profile__topup">

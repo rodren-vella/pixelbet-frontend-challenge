@@ -248,6 +248,7 @@ class App extends Component {
                                 increaseBet={this.increaseBet}
                             />
                             <BetButton
+                                balance={user.balance}
                                 currentSelection={currentSelection}
                                 betAmount={betAmount}
                                 submitBet={this.submitBet}

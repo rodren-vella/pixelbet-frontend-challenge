@@ -11,6 +11,8 @@ $White: #ffffff;
 $Black: #000000;
 
 body {
+  height: 100%;
+  width: 100%;
   margin: 0;
   font-family: "Roboto", sans-serif;
   font-size: 10px;
@@ -31,6 +33,7 @@ button {
   text-decoration: none;
   text-transform: uppercase;
   background: $WildStrawberry;
+  cursor: pointer;
 }
 
 #root {
@@ -85,10 +88,12 @@ button {
   display: flex;
   align-items: center;
   height: 64px;
+  min-height: 64px;
   padding: 0 16px;
   border-bottom: 1px solid $White10;
   font-weight: 700;
   font-size: 14px;
+  background: $PurpleHeart;
 
   polygon {
     fill: $White;
@@ -98,16 +103,15 @@ button {
     justify-content: flex-end;
   }
 
-  &--profile {
-    background: $PurpleHeart;
-    position: sticky;
-    top: 0;
-  }
-
   &__icon {
+    cursor: pointer;
     &--home {
       margin-left: 5px;
     }
+  }
+
+  &__balance {
+    cursor: pointer;
   }
 }
 
@@ -189,6 +193,7 @@ button {
 
       &-item {
         margin-right: 12px;
+        cursor: pointer;
 
         svg {
           width: 40px;
@@ -219,6 +224,10 @@ button {
         font-weight: 700;
       }
 
+      &-control {
+        cursor: pointer;
+      }
+
       &-value {
         margin: 0 16px;
         color: $White;
@@ -244,10 +253,8 @@ button {
   flex-direction: column;
 
   &__topup {
-    display: flex;
-    flex-direction: column;
-
     &-credit {
+      display: block;
       margin: 32px 0;
       font-size: 32px;
       font-weight: 700;
@@ -278,6 +285,8 @@ button {
       align-items: center;
       height: 64px;
       padding: 0 24px 0 8px;
+
+  animation: fadeIn 1s;
 
       svg {
         width: 16px;

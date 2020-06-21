@@ -8,13 +8,13 @@ const betAmountPanel = ({ betAmount, decreaseBet, increaseBet }) => {
             <Minus
                 width="44"
                 onClick={decreaseBet}
-                className="bet-panel__bet-control--less"
+                className="bet-panel__bet-control"
             />
             <span className="bet-panel__bet-value">{betAmount}</span>
             <Plus
                 width="44"
                 onClick={increaseBet}
-                className="bet-panel__bet-control--more"
+                className="bet-panel__bet-control"
             />
         </div>
     );

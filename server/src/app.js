@@ -54,7 +54,9 @@ router.post(
       req.body.sideSelected
     ) {
       if (req.body.username === user.username) {
-        if (user.balance > req.body.betAmount) {
+
+        //AMENDED: check was 'user.balance > req.body.betAmount' so the player couldn't use up all his credit
+        if (user.balance >= req.body.betAmount) {
           user.balance = user.balance - req.body.betAmount;
           const betResult = Math.floor(Math.random() * Math.floor(6)) + 1;
           let amountWon = 0;
