@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
 $PurpleHeart: #5b15c5;
 $Aquamarine: #46ffba;
@@ -12,178 +12,229 @@ $Black: #000000;
 
 body {
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 10px;
-  color: $White;
   text-align: center;
+  color: $White;
   background: $PurpleHeart;
 }
 
 button {
   display: inline-block;
-  background: $WildStrawberry;
-  border: 0;
   width: calc(100% - 32px);
   padding: 15px 0;
+  border: 0;
   border-radius: 32px;
   color: $White;
   font-size: 12px;
   font-weight: 700;
   text-decoration: none;
   text-transform: uppercase;
+  background: $WildStrawberry;
 }
 
 #root {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  opacity: 1;
+  animation: fadeIn 1s;
 }
 
-header {
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes diceInActive {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.1;
+  }
+}
+
+@keyframes buttonInActive {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0.4;
+  }
+}
+
+@keyframes buttonActive {
+  from {
+    opacity: 0.4;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
   height: 64px;
+  padding: 0 16px;
   border-bottom: 1px solid $White10;
   font-weight: 700;
   font-size: 14px;
 
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-}
+  polygon {
+    fill: $White;
+  }
 
-.header {
-  justify-content: flex-end;
+  &--home {
+    justify-content: flex-end;
+  }
+
+  &--profile {
+    background: $PurpleHeart;
+    position: sticky;
+    top: 0;
+  }
 
   &__icon {
-    width: 10px;
-    margin-left: 5px;
-
-    polygon {
-      fill: $White;
+    &--home {
+      margin-left: 5px;
     }
   }
 }
 
-.dice-screen {
+.page-holder {
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
-  padding-top: 32px;
-  align-items: center;
-  color: $White;
+  height: 100vh;
+  opacity: 1;
+  animation: fadeIn 1s;
+}
 
-  &__result {
+.home {
+  .dice-screen {
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
+    align-items: center;
+    padding-top: 32px;
+    color: $White;
 
-    svg {
-      width: 124px;
-    }
-
-    &--WON {
-      svg path {
-        fill: $Aquamarine;
-      }
-    }
-
-    &--LOST {
-      svg path {
-        fill: $Black;
-      }
-    }
-  }
-
-  &__balance {
-    margin-top: 32px;
-    font-size: 32px;
-    font-weight: 700;
-
-    &--LOST {
-      visibility: hidden;
-    }
-  }
-
-  &__verdict {
-    margin-top: 5px;
-    font-size: 12px;
-  }
-}
-
-.bet-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 16px 0 32px;
-  background: $Black10;
-
-  &__dice {
-    &-instructions {
-      display: inline-block;
-      margin-bottom: 16px;
-      color: $White40;
-    }
-
-    &-alldice {
+    &__result {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    &-item {
-      margin-right: 12px;
+      flex-direction: column;
 
       svg {
-        width: 40px;
+        width: 124px;
       }
 
+      &--WON {
+        svg path {
+          fill: $Aquamarine;
+        }
+      }
+
+      &--LOST {
+        svg path {
+          fill: $Black;
+        }
+      }
+    }
+
+    &__balance {
+      margin-top: 32px;
+      font-size: 32px;
+      font-weight: 700;
+
+      &--LOST {
+        visibility: hidden;
+      }
+    }
+
+    &__verdict {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+  }
+
+  .bet-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0 32px;
+    background: $Black10;
+
+    &__dice {
+      &-instructions {
+        display: inline-block;
+        margin-bottom: 16px;
+        color: $White40;
+      }
+
+      &-alldice {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      &-item {
+        margin-right: 12px;
+
+        svg {
+          width: 40px;
+        }
+
+        &--inactive {
+          opacity: 0.1;
+          animation: diceInActive 600ms;
+        }
+
+        &--active {
+          opacity: 1;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &__bet {
+      &-amount {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 40px 0 32px;
+        font-size: 32px;
+        font-weight: 700;
+      }
+
+      &-value {
+        margin: 0 16px;
+        color: $White;
+      }
+    }
+
+    &__button {
       &--inactive {
-        opacity: 0.1;
+        opacity: 0.4;
+        animation: buttonInActive 600ms;
       }
 
       &--active {
         opacity: 1;
+        animation: buttonActive 600ms;
       }
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-  }
-
-  &__bet {
-    &-amount {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      font-weight: 700;
-      margin: 40px 0 32px;
-    }
-
-    &-value {
-      margin: 0 16px;
-      color: $White;
-    }
-  }
-
-  &__button {
-    &--disable {
-      opacity: 0.4;
-    }
-
-    &-item {
-      display: inline-block;
-      background: $WildStrawberry;
-      border: 0;
-      width: calc(100% - 32px);
-      padding: 15px 0;
-      border-radius: 32px;
-      color: $White;
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
     }
   }
 }
@@ -192,39 +243,36 @@ header {
   display: flex;
   flex-direction: column;
 
-  &-header {
-    position: sticky;
-    background: $PurpleHeart;
-    top: 0;
-  }
-
-  &-topup {
+  &__topup {
     display: flex;
     flex-direction: column;
-    &__credit {
+
+    &-credit {
+      margin: 32px 0;
       font-size: 32px;
       font-weight: 700;
-      margin: 32px 0;
     }
   }
 
-  &-history {
+  &__history {
     display: flex;
     flex-direction: column;
     margin: 64px 0 24px 16px;
     text-align: left;
 
-    &__title {
+    &-title {
+      margin-bottom: 24px;
       font-size: 32px;
       font-weight: 700;
-      margin-bottom: 24px;
     }
-    &__list {
-      list-style: none;
+
+    &-list {
       margin: 0;
       padding: 0;
+      list-style: none;
     }
-    &__item {
+
+    &-item {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -235,43 +283,51 @@ header {
         width: 16px;
         margin: 0 24px 0 0;
       }
-      &-column {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        width: 50%;
-      }
-      &-info {
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-      }
-      &-verdict {
-        font-size: 14px;
-        line-height: 20px;
-      }
-      &-timestamp {
-        font-size: 8px;
-        color: $White60;
-      }
-      &-margin {
-        font-size: 12px;
-        &::before {
-          content: '-';
-        }
+    }
 
-        &--WON {
-          color: $Aquamarine;
-          font-weight: 700;
-          &::before {
-            content: '+';
-          }
+    &-column {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 50%;
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    &-verdict {
+      line-height: 20px;
+      font-size: 14px;
+    }
+
+    &-timestamp {
+      font-size: 8px;
+      color: $White60;
+    }
+
+    &-margin {
+      font-size: 12px;
+
+      &::before {
+        content: "-";
+      }
+
+      &--WON {
+        font-weight: 700;
+        color: $Aquamarine;
+
+        &::before {
+          content: "+";
         }
       }
-      &-credit {
-        margin-left: auto;
-        font-size: 14px;
-      }
+    }
+
+    &-credit {
+      margin-left: auto;
+      font-size: 14px;
     }
   }
 }
