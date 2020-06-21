@@ -105,6 +105,7 @@ button {
 
   &__icon {
     cursor: pointer;
+
     &--home {
       margin-left: 5px;
     }
@@ -264,7 +265,7 @@ button {
   &__history {
     display: flex;
     flex-direction: column;
-    margin: 64px 0 24px 16px;
+    margin: 64px 16px 32px;
     text-align: left;
 
     &-title {
@@ -284,9 +285,22 @@ button {
       flex-direction: row;
       align-items: center;
       height: 64px;
-      padding: 0 24px 0 8px;
+      padding: 0 8px;
 
-  animation: fadeIn 1s;
+      &[data-position="4"] {
+        &~[data-position] {
+          display: none;
+        }
+      }
+
+      &--show {
+        &[data-position="4"] {
+          &~[data-position] {
+            display: flex;
+            animation: fadeIn 1s;
+          }
+        }
+      }
 
       svg {
         width: 16px;
@@ -337,6 +351,18 @@ button {
     &-credit {
       margin-left: auto;
       font-size: 14px;
+    }
+
+    &-button {
+      display: block;
+
+      button {
+        width: 100%;
+      }
+
+      &--disable {
+        display: none;
+      }
     }
   }
 }

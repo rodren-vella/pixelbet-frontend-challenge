@@ -16,6 +16,15 @@ const profile = ({ user, allDice, togglePage }) => {
         return userBalanceHistory.push(userBalance);
     });
 
+    const showAllItems = () => {
+        const listParent = document.getElementById("profile__history-list");
+        if (listParent === undefined) return;
+        betHistoryReverse.map((item, i) => listParent.childNodes[i].classList.add("profile__history-item--show"));
+
+        const showAllButton = document.getElementById("js-show-all-history");
+        showAllButton.classList.add("profile__history-button--disable");
+    }
+
     return (
         <div className="page-holder profile" id="js-profile">
             <header className="profile__header header header--profile">
@@ -33,9 +42,9 @@ const profile = ({ user, allDice, togglePage }) => {
                 <span className="profile__history-title">History</span>
 
                 {betHistoryReverse.length !== 0 && (
-                    <ul className="profile__history-list">
+                    <ul id="profile__history-list" className="profile__history-list">
                         {betHistoryReverse.map((bet, i) => (
-                            <li key={i} className="profile__history-item">
+                            <li key={i} className="profile__history-item" data-position={i}>
                                 <div className="profile__history-column">
                                     {getDiceImage(
                                         allDice,
@@ -81,7 +90,12 @@ const profile = ({ user, allDice, togglePage }) => {
                             </li>
                         ))}
                     </ul>
+
                 )}
+
+                <div className="profile__history-button" id="js-show-all-history">
+                    <button onClick={showAllItems}>show more</button>
+                </div>
             </div>
         </div>
     );
