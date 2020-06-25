@@ -1,5 +1,5 @@
-import { INCREASE_BET } from "./constants";
-import React, { Component } from "react";
+//import { INCREASE_BET } from "./constants";
+import React from "react";
 import { combineReducers } from "redux";
 import { getDiceIndex } from "./utils";
 
@@ -12,24 +12,21 @@ import { ReactComponent as Dice6 } from "../assets/dice6.svg";
 
 /**
  *
- *
  * BET AMOUNT
- *
  *
  * */
 
-const intialState = {
+const intialBetState = {
   betAmount: 0,
   betDifference: 10,
 };
 
-export const betAmount = (state = intialState, action = {}) => {
+export const betAmount = (state = intialBetState, action = {}) => {
   let newBetAmount;
   switch (action.type) {
     case "INCREASE_BET":
       newBetAmount =
-        state.betAmount <=
-        /*this.state.user.balance*/ 2000 - state.betDifference
+        state.betAmount <= action.payload.myBalanceAmount - state.betDifference
           ? state.betAmount + state.betDifference
           : state.betAmount;
       return { ...state, betAmount: newBetAmount };
@@ -63,41 +60,24 @@ const intialSelectDiceState = {
   ],
 };
 
-/**
- * HIGHLIGHT selected dice and DIM others
- *
- * @function selectDice
- * @param {dice} number Chosen dice number
- * @param {i} number index
- */
 export const selectDice = (state = intialSelectDiceState, action = {}) => {
   switch (action.type) {
     case "SELECT_DICE":
-      //RUN ONLY IF THE NEW SELECTION IS NOT THE SAME AS THE PREVIOUS
       if (state.diceSelected !== action.payload.dice) {
-        console.log("selecting dice");
-        //IF A DICE WAS ALREADY CHOSEN BEFORE THIS ONE, THAN REMOVE OLD DICE SELECTION
         if (state.diceSelected !== 0) {
-          document
-            .getElementById("js-alldice")
-            .childNodes[
-              getDiceIndex(state.diceSelected, state.allDice)
-            ].classList.toggle("active");
+          document.getElementById("js-alldice").childNodes[
+            getDiceIndex(state.diceSelected, state.allDice)
+          ].classList.toggle("active");
         }
-        //FIRST SELECTION MADE so DIM ALL DICE
         if (state.diceSelected === 0) {
-          state.allDice.map((dice, i) =>
-            document
-              .getElementById("js-alldice")
-              .childNodes[i].classList.add("selection-made")
+          state.allDice.map((dice, i) => document.getElementById("js-alldice")
+            .childNodes[i].classList.add("selection-made")
           );
         }
-        //SET ACTIVE CLASS to CHOSEN DICE
-        document
-          .getElementById("js-alldice")
+        document.getElementById("js-alldice")
           .childNodes[action.payload.i].classList.toggle("active");
         return { ...state, diceSelected: action.payload.dice };
-      }
+      };
     default:
       return state;
   }
@@ -105,9 +85,7 @@ export const selectDice = (state = intialSelectDiceState, action = {}) => {
 
 /**
  *
- *
  * GET USER DATA
- *
  *
  * */
 
@@ -116,16 +94,31 @@ const intialStateUsers = {
   lastDiceSelected: 0,
   gameStatus: "HOME",
   sideGenerated: 0,
+  error: "",
 };
 
 export const requestUserData = (state = intialStateUsers, action = {}) => {
   switch (action.type) {
-    case "REQUEST_USERS_PENDING":
-      return { ...state, isPending: true };
-    case "REQUEST_USERS_SUCCESS":
-      return { ...state, user: action.payload, isPending: false };
-    case "REQUEST_USERS_FAILED":
-      return { ...state, user: action.payload, isPending: false };
+    case "LAST_DICE_SELECTED":
+      return { ...state, lastDiceSelected: action.payload.diceSelected };
+
+    case "REQUEST_USER_PENDING":
+      return { ...state };
+    case "REQUEST_USER_SUCCESS":
+      return { ...state, user: action.payload };
+    case "REQUEST_USER_FAILED":
+      return { ...state, error: action.payload };
+
+    case "PLACE_BET_PENDING":
+      return { ...state };
+    case "PLACE_BET_SUCCESS":
+      return {
+        ...state,
+        gameStatus: action.payload.result,
+        sideGenerated: action.payload.sideGenerated
+      };
+    case "PLACE_BET_FAILED":
+      return { ...state, error: action.payload };
     default:
       return state;
   }
@@ -142,5 +135,5 @@ export const requestUserData = (state = intialStateUsers, action = {}) => {
 export const allReducers = combineReducers({
   betAmount,
   selectDice,
-  requestUserData,
+  requestUserData
 });

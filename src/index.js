@@ -6,12 +6,15 @@ import { createLogger } from "redux-logger";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { allReducers } from "./components/reducers";
-import thunkMiddleware from "redux-thunk";
+import thunk from 'redux-thunk';
+/*import thunkMiddleware from "redux-thunk";*/
+import { composeWithDevTools } from "redux-devtools-extension";
 
 const logger = createLogger();
 const store = createStore(
   allReducers,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  //(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()),
+  composeWithDevTools(applyMiddleware(thunk, logger))
   //applyMiddleware(thunkMiddleware, logger)
 );
 

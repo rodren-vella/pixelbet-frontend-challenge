@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectMyDice } from "./actions";
 
 const DiceSelection = () => {
-  //const myBetAmount = useSelector((state) => state.betAmount.betAmount);
   const allMyDice = useSelector((state) => state.selectDice.allDice);
   const dispatch = useDispatch();
   return (

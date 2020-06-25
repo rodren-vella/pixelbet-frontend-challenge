@@ -7,6 +7,7 @@ import { decreaceMyBet, increaceMyBet } from "./actions";
 
 const BetAmountPanel = () => {
   const myBetAmount = useSelector((state) => state.betAmount.betAmount);
+  const myBalanceAmount = useSelector((state) => state.requestUserData.user.balance);
   const dispatch = useDispatch();
 
   return (
@@ -15,7 +16,7 @@ const BetAmountPanel = () => {
       <Minus width="44" onClick={() => dispatch(decreaceMyBet())} />
       <span>{myBetAmount}</span>
       {/* <Plus width="44" onClick={increaceBet} /> */}
-      <Plus width="44" onClick={() => dispatch(increaceMyBet())} />
+      <Plus width="44" onClick={() => dispatch(increaceMyBet(myBalanceAmount))} />
     </div>
   );
 };
