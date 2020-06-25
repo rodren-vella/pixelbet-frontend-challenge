@@ -18,7 +18,7 @@ import { ReactComponent as Dice6 } from "../assets/dice6.svg";
 
 const intialBetState = {
   betAmount: 0,
-  betDifference: 50,
+  betDifference: 10,
 };
 
 export const betAmount = (state = intialBetState, action = {}) => {
