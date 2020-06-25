@@ -11,12 +11,12 @@ const BetAmountPanel = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="betPanel__amountPanel">
+    <div className="bet-panel__bet-amount">
       {/* <Minus width="44" onClick={decreaceBet} /> */}
-      <Minus width="44" onClick={() => dispatch(decreaceMyBet())} />
-      <span>{myBetAmount}</span>
+      <Minus width="44" onClick={() => dispatch(decreaceMyBet())} className="bet-panel__bet-control" />
+      <span className="bet-panel__bet-value">{myBetAmount}</span>
       {/* <Plus width="44" onClick={increaceBet} /> */}
-      <Plus width="44" onClick={() => dispatch(increaceMyBet(myBalanceAmount))} />
+      <Plus width="44" onClick={() => dispatch(increaceMyBet(myBalanceAmount))} className="bet-panel__bet-control" />
     </div>
   );
 };

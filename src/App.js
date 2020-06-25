@@ -4,24 +4,27 @@ import { connect } from "react-redux";
 import { requestUserData } from "./components/actions";
 import "./App.scss";
 
+import Home from "./components/home";
 import TopBar from "./components/topBar";
 import DiceScreen from "./components/diceScreen";
 import BetPanel from "./components/betPanel";
 import DiceSelection from "./components/diceSelection";
 import BetAmountPanel from "./components/betAmountPanel";
 import BetButton from "./components/betButton";
+import Profile from "./components/profile";
 
 const mapStateToProps = (state) => {
   return {
-    user: state.requestUserData.user
+    gamePage: state.requestUserData.gamePage
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onRequestUser: () => dispatch(requestUserData()),
+    onRequestUser: () => dispatch(requestUserData())
   }
 }
+
 
 class App extends Component {
   componentDidMount() {
@@ -29,19 +32,25 @@ class App extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, gamePage } = this.props;
 
     return (
-      <div className="diceToss">
-        <TopBar balance={user.balance} />
-        <DiceScreen />
-        <BetPanel>
-          <DiceSelection />
-          <BetAmountPanel />
-          <BetButton />
-        </BetPanel>
-      </div>
-    );
+      <React.Fragment>
+        {gamePage === "HOME" ? (
+          <Home>
+            <TopBar />
+            <DiceScreen />
+            <BetPanel>
+              <DiceSelection />
+              <BetAmountPanel />
+              <BetButton />
+            </BetPanel>
+          </Home>
+        ) : (
+            <Profile />
+          )}
+      </React.Fragment>
+    )
   }
 }
 

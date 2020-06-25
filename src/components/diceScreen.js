@@ -1,19 +1,9 @@
 import React from "react";
 import logo from "../assets/dice-logo.svg";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { GetDiceImage } from "./utils";
 
-const getDiceImage = (allDice, searchDiceNumber) => {
-  return allDice.find(({ diceNumber }) => diceNumber === searchDiceNumber)
-    .diceImage;
-};
-
-const DiceScreen = (/*{
-  allDice,
-  sideGenerated,
-  lastDiceSelected,
-  gameStatus,
-  betAmount,
-}*/) => {
+const DiceScreen = () => {
   const allDice = useSelector((state) => state.selectDice.allDice);
   const sideGenerated = useSelector((state) => state.requestUserData.sideGenerated);
   const lastDiceSelected = useSelector((state) => state.requestUserData.lastDiceSelected);
@@ -21,18 +11,19 @@ const DiceScreen = (/*{
   const userBalance = useSelector((state) => state.requestUserData.user.balance);
 
   return (
-    <div className="diceScreen">
+    <div className="dice-screen">
       {gameStatus === "HOME" ? (
         <img src={logo} alt="DICE TOSS" width="124" />
       ) : (
-          <div className={`diceScreen__result diceScreen__result--${gameStatus}`}>
-            {gameStatus === "WON" && getDiceImage(allDice, lastDiceSelected)}
-            {gameStatus === "LOST" && getDiceImage(allDice, sideGenerated)}
-            <span className="result__amount">{userBalance}</span>
-            <span className="result__outcome">{gameStatus}</span>
+          <div className={`dice-screen__result dice-screen__result--${gameStatus}`}>
+            {gameStatus === "WON" && GetDiceImage(allDice, lastDiceSelected)}
+            {gameStatus === "LOST" && GetDiceImage(allDice, sideGenerated)}
+            <span className={`dice-screen__balance dice-screen__balance--${gameStatus}`}>{userBalance}</span>
+            <span className="dice-screen__verdict">{gameStatus}</span>
           </div>
-        )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 

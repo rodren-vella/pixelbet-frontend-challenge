@@ -18,7 +18,7 @@ import { ReactComponent as Dice6 } from "../assets/dice6.svg";
 
 const intialBetState = {
   betAmount: 0,
-  betDifference: 10,
+  betDifference: 50,
 };
 
 export const betAmount = (state = intialBetState, action = {}) => {
@@ -51,12 +51,12 @@ export const betAmount = (state = intialBetState, action = {}) => {
 const intialSelectDiceState = {
   diceSelected: 0,
   allDice: [
-    { diceNumber: 1, diceImage: <Dice1 /> },
-    { diceNumber: 2, diceImage: <Dice2 /> },
-    { diceNumber: 3, diceImage: <Dice3 /> },
-    { diceNumber: 4, diceImage: <Dice4 /> },
-    { diceNumber: 5, diceImage: <Dice5 /> },
-    { diceNumber: 6, diceImage: <Dice6 /> },
+    { number: 1, image: <Dice1 /> },
+    { number: 2, image: <Dice2 /> },
+    { number: 3, image: <Dice3 /> },
+    { number: 4, image: <Dice4 /> },
+    { number: 5, image: <Dice5 /> },
+    { number: 6, image: <Dice6 /> },
   ],
 };
 
@@ -77,7 +77,9 @@ export const selectDice = (state = intialSelectDiceState, action = {}) => {
         document.getElementById("js-alldice")
           .childNodes[action.payload.i].classList.toggle("active");
         return { ...state, diceSelected: action.payload.dice };
-      };
+      } else {
+        return state;
+      }
     default:
       return state;
   }
@@ -93,6 +95,7 @@ const intialStateUsers = {
   user: {},
   lastDiceSelected: 0,
   gameStatus: "HOME",
+  gamePage: "HOME",
   sideGenerated: 0,
   error: "",
 };
@@ -101,6 +104,9 @@ export const requestUserData = (state = intialStateUsers, action = {}) => {
   switch (action.type) {
     case "LAST_DICE_SELECTED":
       return { ...state, lastDiceSelected: action.payload.diceSelected };
+    case "TOGGLE_PAGE":
+      const newPage = state.gamePage === "HOME" ? "PROFILE" : "HOME"
+      return { ...state, gamePage: newPage };
 
     case "REQUEST_USER_PENDING":
       return { ...state };

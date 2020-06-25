@@ -19,6 +19,10 @@ export const lastDiceSelected = (diceSelected) => ({
   payload: { diceSelected }
 });
 
+export const togglePage = () => ({
+  type: "TOGGLE_PAGE"
+});
+
 export const requestUserData = () => (dispatch) => {
   dispatch({ type: "REQUEST_USER_PENDING" });
   fetch("http://localhost:3000/get-user/robouser")
